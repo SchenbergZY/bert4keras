@@ -58,8 +58,8 @@ class BertModel(object):
     def build(self):
         """Bert模型构建函数
         """
-        x_in = Input(shape=(None, ), name='Input-Token')
-        s_in = Input(shape=(None, ), name='Input-Segment')
+        x_in = Input(shape=(512, ), name='Input-Token')
+        s_in = Input(shape=(512, ), name='Input-Segment')
         x, s = x_in, s_in
 
         # 自行构建Mask
