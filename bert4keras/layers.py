@@ -115,13 +115,13 @@ class MultiHeadAttention(Layer):
         a = K.softmax(a)
         # 完成输出
         o = tf.einsum('bhjk,bkhd->bjhd', a, vw)
-        o = K.reshape(o, (-1, K.shape(o)[1], self.out_dim))
+        o = K.reshape(o, (-1, 512, self.out_dim))#K.shape(o)[1]
         o = self.o_dense(o)
         o = sequence_masking(o, q_mask, 0)
         return o
 
     def compute_output_shape(self, input_shape):
-        return (input_shape[0][0], 512, self.out_dim) #input_shape[0][1]
+        return (input_shape[0][0], input_shape[0][1], self.out_dim)
 
     def get_config(self):
         config = {
