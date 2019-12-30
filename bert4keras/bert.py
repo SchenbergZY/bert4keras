@@ -81,9 +81,9 @@ class BertModel(object):
                               merge_mode='add',
                               embeddings_initializer=self.initializer,
                               name='Embedding-Position')(x)
-        x = LayerNormalization(name='Embedding-Norm')(x)
         if self.dropout_rate > 0:
             x = Dropout(rate=self.dropout_rate, name='Embedding-Dropout')(x)
+        x = LayerNormalization(name='Embedding-Norm')(x)
         if self.embedding_size != self.hidden_size:
             x = Dense(units=self.hidden_size,
                       kernel_initializer=self.initializer,
