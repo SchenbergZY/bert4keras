@@ -71,7 +71,7 @@ class BertModel(object):
                       output_dim=self.embedding_size,
                       embeddings_initializer=self.initializer,
                       name='Embedding-Token')(x)
-        s = Embedding(input_dim=2,
+        s = Embedding(input_dim=1, #1 or 2
                       output_dim=self.embedding_size,
                       embeddings_initializer=self.initializer,
                       name='Embedding-Segment')(s)
