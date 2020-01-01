@@ -80,11 +80,18 @@ class BertModel(object):
                       embeddings_initializer=self.initializer,
                       name='Embedding-Segment')(s)
         x = Add(name='Embedding-Token-Segment')([x, s])
-        x = PositionEmbedding(input_dim=self.max_position_embeddings,
-                              output_dim=self.embedding_size,
-                              merge_mode='add',
-                              embeddings_initializer=self.initializer,
-                              name='Embedding-Position')(x)
+        if self.max_position_embeddings == 514:
+            x = RobertaPositionEmbeddings(input_dim=self.max_position_embeddings,
+                                  output_dim=self.embedding_size,
+                                  merge_mode='add',
+                                  embeddings_initializer=self.initializer,
+                                  name='Embedding-Position')(x,x_in)
+        else:
+            x = PositionEmbedding(input_dim=self.max_position_embeddings,
+                                  output_dim=self.embedding_size,
+                                  merge_mode='add',
+                                  embeddings_initializer=self.initializer,
+                                  name='Embedding-Position')(x)
         x = LayerNormalization(name='Embedding-Norm')(x)
         if self.dropout_rate > 0:
             x = Dropout(rate=self.dropout_rate, name='Embedding-Dropout')(x)
