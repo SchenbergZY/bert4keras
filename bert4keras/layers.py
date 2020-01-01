@@ -180,7 +180,7 @@ class RobertaPositionEmbeddings(Layer):
 
         self.position_embeddings = tf.keras.layers.Embedding(
             self.input_dim,
-            config.hidden_size,
+            self.hidden_size,
             embeddings_initializer=self.embeddings_initializer,
             name="embeddings",
         )
