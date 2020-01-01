@@ -160,7 +160,58 @@ class LayerNormalization(Layer):
         outputs += self.beta
         return outputs
 
+#测试下roberta
+class RobertaPositionEmbeddings(Layer):
+    """Construct the embeddings from word, position and token_type embeddings.
+    """
 
+    def __init__(self, 
+        input_dim,
+        output_dim,
+        merge_mode='add',
+        embeddings_initializer='zeros',
+        **kwargs):
+        super(RobertaPositionEmbeddings, self).__init__(**kwargs)
+        self.padding_idx = 1
+        self.input_dim = input_dim
+        self.hidden_size = output_dim
+        self.merge_mode = merge_mode
+        self.embeddings_initializer = initializers.get(embeddings_initializer)
+
+        self.position_embeddings = tf.keras.layers.Embedding(
+            self.input_dim,
+            config.hidden_size,
+            embeddings_initializer=self.embeddings_initializer,
+            name="embeddings",
+        )
+
+    def build(self, input_shape):
+        super(RobertaPositionEmbeddings, self).build(input_shape)
+
+    def call(self, inputs,token_ids):
+        input_shape = K.shape(inputs)
+        return self._embedding(inputs,token_ids)
+
+    def _embedding(self, inputs,token_ids):
+        """Applies embedding based on inputs tensor."""
+        #seq_length = 512
+        #if position_ids is None:
+        #    position_ids = tf.range(seq_length, dtype=tf.int32)[tf.newaxis, :]
+        position_ids = self.create_position_ids_from_input_ids(token_ids)
+        position_embeddings = self.position_embeddings(position_ids)
+        embeddings = inputs + position_embeddings
+        return embeddings
+    def create_position_ids_from_input_ids(self, x):
+        """ Replace non-padding symbols with their position numbers. Position numbers begin at
+        padding_idx+1. Padding symbols are ignored. This is modified from fairseq's
+        `utils.make_positions`.
+        :param torch.Tensor x:
+        :return torch.Tensor:
+        """
+        mask = tf.cast(tf.math.not_equal(x, self.padding_idx), dtype=tf.int32)
+        incremental_indicies = tf.math.cumsum(mask, axis=1) * mask
+        return incremental_indicies + self.padding_idx
+ 
 class PositionEmbedding(Layer):
     """定义位置Embedding，这里的Embedding是可训练的。
     """
