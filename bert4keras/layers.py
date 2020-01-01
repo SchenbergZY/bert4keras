@@ -431,6 +431,7 @@ custom_objects = {
     'MultiHeadAttention': MultiHeadAttention,
     'LayerNormalization': LayerNormalization,
     'PositionEmbedding': PositionEmbedding,
+    'RobertaPositionEmbeddings': RobertaPositionEmbeddings,
     'GroupDense': GroupDense,
     'FeedForward': FeedForward,
     'EmbeddingDense': EmbeddingDense,
