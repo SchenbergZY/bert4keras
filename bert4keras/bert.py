@@ -71,11 +71,7 @@ class BertModel(object):
                       output_dim=self.embedding_size,
                       embeddings_initializer=self.initializer,
                       name='Embedding-Token')(x)
-        if self.max_position_embeddings == 514:
-            apples = 1
-        else:
-            apples = 2
-        s = Embedding(input_dim=apples, #1 or 2
+        s = Embedding(input_dim=2, #1 or 2 , 2 finally because roberta need to train it
                       output_dim=self.embedding_size,
                       embeddings_initializer=self.initializer,
                       name='Embedding-Segment')(s)
