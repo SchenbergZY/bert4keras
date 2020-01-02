@@ -81,7 +81,7 @@ class BertModel(object):
                                   output_dim=self.embedding_size,
                                   merge_mode='add',
                                   embeddings_initializer=self.initializer,
-                                  name='Embedding-Position')(x,x_in)
+                                  name='Embedding-Position')([x,x_in])
         else:
             x = PositionEmbedding(input_dim=self.max_position_embeddings,
                                   output_dim=self.embedding_size,
