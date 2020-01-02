@@ -266,7 +266,7 @@ class PositionEmbedding(Layer):
     def get_config(self):
         config = {
             'input_dim': self.input_dim,
-            'output_dim': self.output_dim,
+            'output_dim': self.hidden_size,
             'merge_mode': self.merge_mode,
             'embeddings_initializer': initializers.serialize(self.embeddings_initializer),
         }
