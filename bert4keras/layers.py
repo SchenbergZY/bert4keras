@@ -188,9 +188,10 @@ class RobertaPositionEmbeddings(Layer):
     def build(self, input_shape):
         super(RobertaPositionEmbeddings, self).build(input_shape)
 
-    def call(self, inputs,token_ids):
-        input_shape = K.shape(inputs)
-        return self._embedding(inputs,token_ids)
+    def call(self, inputs):
+        x,x_in = inputs[0],inputs[1]
+        input_shape = K.shape(x)
+        return self._embedding(x,x_in)
 
     def _embedding(self, inputs,token_ids):
         """Applies embedding based on inputs tensor."""
