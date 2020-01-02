@@ -212,6 +212,16 @@ class RobertaPositionEmbeddings(Layer):
         mask = tf.cast(tf.math.not_equal(x, self.padding_idx), dtype=tf.int32)
         incremental_indicies = tf.math.cumsum(mask, axis=1) * mask
         return incremental_indicies + self.padding_idx
+    
+    def get_config(self):
+        config = {
+            'input_dim': self.input_dim,
+            'output_dim': self.output_dim,
+            'merge_mode': self.merge_mode,
+            'embeddings_initializer': initializers.serialize(self.embeddings_initializer),
+        }
+        base_config = super(RobertaPositionEmbeddings, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
  
 class PositionEmbedding(Layer):
     """定义位置Embedding，这里的Embedding是可训练的。
