@@ -32,6 +32,7 @@ class BertModel(object):
             with_mlm=False,  # 是否包含MLM部分
             keep_words=None,  # 要保留的词ID列表
             block_sharing=False,  # 是否共享同一个transformer block
+            maxlen=512, #maxlen
     ):
         if keep_words is None:
             self.vocab_size = vocab_size
@@ -58,8 +59,8 @@ class BertModel(object):
     def build(self):
         """Bert模型构建函数
         """
-        x_in = Input(shape=(512, ), name='Input-Token')
-        s_in = Input(shape=(512, ), name='Input-Segment')
+        x_in = Input(shape=(maxlen, ), name='Input-Token')
+        s_in = Input(shape=(maxlen, ), name='Input-Segment')
         x, s = x_in, s_in
 
         # 自行构建Mask
