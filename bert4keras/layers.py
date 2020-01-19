@@ -46,6 +46,7 @@ class MultiHeadAttention(Layer):
                  head_size,
                  key_size=None,
                  kernel_initializer='glorot_uniform',
+                 maxlen=512,
                  **kwargs):
         super(MultiHeadAttention, self).__init__(**kwargs)
         self.heads = heads
@@ -53,6 +54,7 @@ class MultiHeadAttention(Layer):
         self.out_dim = heads * head_size
         self.key_size = key_size if key_size else head_size
         self.kernel_initializer = initializers.get(kernel_initializer)
+        self.maxlen = maxlen
 
     def build(self, input_shape):
         super(MultiHeadAttention, self).build(input_shape)
@@ -115,7 +117,7 @@ class MultiHeadAttention(Layer):
         a = K.softmax(a)
         # 完成输出
         o = tf.einsum('bhjk,bkhd->bjhd', a, vw)
-        o = K.reshape(o, (-1, 512, self.out_dim))#K.shape(o)[1]
+        o = K.reshape(o, (-1, self.maxlen, self.out_dim))#K.shape(o)[1]
         o = self.o_dense(o)
         o = sequence_masking(o, q_mask, 0)
         return o
