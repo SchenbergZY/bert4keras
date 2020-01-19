@@ -451,6 +451,7 @@ def build_bert_model(config_path,
                      application='encoder',
                      keep_words=None,
                      albert=False,
+                     maxlen=512,
                      return_keras_model=True):
     """根据配置文件构建bert模型，可选加载checkpoint权重
     """
@@ -479,6 +480,7 @@ def build_bert_model(config_path,
                 with_nsp=with_nsp,
                 with_mlm=with_mlm,
                 keep_words=keep_words,
+                maxlen=maxlen,
                 block_sharing=albert)
 
     bert.build()
