@@ -71,10 +71,16 @@ class BertModel(object):
                       output_dim=self.embedding_size,
                       embeddings_initializer=self.initializer,
                       name='Embedding-Token')(x)
-        s = Embedding(input_dim=2, #1 or 2 , 2 finally because roberta need to train it
-                      output_dim=self.embedding_size,
-                      embeddings_initializer=self.initializer,
-                      name='Embedding-Segment')(s)
+        if self.max_position_embeddings == 514:
+            s = Embedding(input_dim=1, #1 or 2 , 2 finally because roberta need to train it,1 because huggingface does so.
+                          output_dim=self.embedding_size,
+                          embeddings_initializer=self.initializer,
+                          name='Embedding-Segment')(s)
+        else:
+            s = Embedding(input_dim=2, #1 or 2 , 2 finally because roberta need to train it,1 because huggingface does so.
+                          output_dim=self.embedding_size,
+                          embeddings_initializer=self.initializer,
+                          name='Embedding-Segment')(s)            
         x = Add(name='Embedding-Token-Segment')([x, s])
         if self.max_position_embeddings == 514:
             x = RobertaPositionEmbeddings(input_dim=self.max_position_embeddings,
