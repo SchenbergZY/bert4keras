@@ -55,12 +55,13 @@ class BertModel(object):
         self.keep_words = keep_words
         self.block_sharing = block_sharing
         self.additional_outputs = []
+        self.maxlen = maxlen
 
     def build(self):
         """Bert模型构建函数
         """
-        x_in = Input(shape=(maxlen, ), name='Input-Token')
-        s_in = Input(shape=(maxlen, ), name='Input-Segment')
+        x_in = Input(shape=(self.maxlen, ), name='Input-Token')
+        s_in = Input(shape=(self.maxlen, ), name='Input-Segment')
         x, s = x_in, s_in
 
         # 自行构建Mask
@@ -176,6 +177,7 @@ class BertModel(object):
                 MultiHeadAttention(heads=self.num_attention_heads,
                                    head_size=self.attention_head_size,
                                    kernel_initializer=self.initializer,
+                                   maxlen=self.maxlen,
                                    name=attention_name),
                 Dropout(rate=self.dropout_rate,
                         name='%s-Dropout' % attention_name),
