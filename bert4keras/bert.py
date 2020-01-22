@@ -74,6 +74,7 @@ class BertModel(object):
                       embeddings_initializer=self.initializer,
                       name='Embedding-Token')(x)
         if self.max_position_embeddings == 514:
+            s = Mask(mask_value=1.)(s)
             s = Embedding(input_dim=1, #1 or 2 , 2 finally because roberta need to train it,1 because huggingface does so.
                           output_dim=self.embedding_size,
                           embeddings_initializer=self.initializer,
