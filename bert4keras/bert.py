@@ -66,8 +66,12 @@ class BertModel(object):
         x, s = x_in, s_in
 
         # 自行构建Mask
-        sequence_mask = Lambda(lambda x: K.cast(K.greater(x, 0), 'float32'),
-                               name='Sequence-Mask')(x)
+        if self.max_position_embeddings == 514:
+            sequence_mask = Lambda(lambda x: K.cast(K.not_equal(x, 1), 'float32'),
+                                name='Sequence-Mask')(x)        
+        else:
+            sequence_mask = Lambda(lambda x: K.cast(K.greater(x, 0), 'float32'),
+                                name='Sequence-Mask')(x)
 
         # Embedding部分
         x = Embedding(input_dim=self.vocab_size,
@@ -75,10 +79,10 @@ class BertModel(object):
                       embeddings_initializer=self.initializer,
                       name='Embedding-Token')(x)
         if self.max_position_embeddings == 514:
-            s = Masking(mask_value=1.)(s)
-            s = Embedding(input_dim=1, #1 or 2 , 2 finally because roberta need to train it,1 because huggingface does so.
+            s = Embedding(input_dim=2, #1 or 2 , 2 finally because we set 1 as trained and 0 for padding
                           output_dim=self.embedding_size,
                           embeddings_initializer=self.initializer,
+                          mask_zero=True,
                           name='Embedding-Segment')(s)
         else:
             s = Embedding(input_dim=2, #1 or 2 , 2 finally because roberta need to train it,1 because huggingface does so.
