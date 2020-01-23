@@ -66,11 +66,11 @@ class BertModel(object):
         x, s = x_in, s_in
 
         # 自行构建Mask
-        if self.max_position_embeddings == 514:
-            sequence_mask = Lambda(lambda x: K.cast(K.not_equal(x, 1), 'float32'),
-                                name='Sequence-Mask')(x)        
-        else:
-            sequence_mask = Lambda(lambda x: K.cast(K.greater(x, 0), 'float32'),
+        #if self.max_position_embeddings == 514:
+        #    sequence_mask = Lambda(lambda x: K.cast(K.not_equal(x, 1), 'float32'),
+        #                        name='Sequence-Mask')(x)        
+        #else:
+        sequence_mask = Lambda(lambda x: K.cast(K.greater(x, 0), 'float32'),
                                 name='Sequence-Mask')(x)
 
         # Embedding部分
